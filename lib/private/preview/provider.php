@@ -22,4 +22,8 @@ abstract class Provider {
 	 *		OC_Image object of the preview
 	 */
 	abstract public function getThumbnail($path, $maxX, $maxY, $scalingup, $fileview);
+
+	public function canPreserveAspect() {
+		return false;
+	}
 }

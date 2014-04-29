@@ -45,6 +45,10 @@ class MP3 extends Provider {
 		return $image->valid() ? $image : false;
 	}
 
+	public function canPreserveAspect() {
+		return true;
+	}
+
 }
 
 \OC\Preview::registerProvider('OC\Preview\MP3');

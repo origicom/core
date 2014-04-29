@@ -57,6 +57,10 @@ if (!\OC_Util::runningOnWindows()) {
 			return $image->valid() ? $image : false;
 		}
 
+		public function canPreserveAspect() {
+			return true;
+		}
+
 		private function initCmd() {
 			$cmd = '';
 

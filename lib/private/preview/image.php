@@ -31,6 +31,11 @@ class Image extends Provider {
 
 		return $image->valid() ? $image : false;
 	}
+
+	public function canPreserveAspect() {
+		return true;
+	}
+
 }
 
 \OC\Preview::registerProvider('OC\Preview\Image');

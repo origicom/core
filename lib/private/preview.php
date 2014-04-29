@@ -43,6 +43,7 @@ class Preview {
 	private $maxY;
 	private $scalingUp;
 	private $mimeType;
+	private $keepAspect = false;
 
 	//filemapper used for deleting previews
 	// index is path, value is fileinfo
@@ -267,6 +268,11 @@ class Preview {
 		return $this;
 	}
 
+	public function setKeepAspect($keepAspect) {
+		$this->keepAspect = $keepAspect;
+		return $this;
+	}
+
 	/**
 	 * @brief check if all parameters are valid
 	 * @return bool
@@ -465,15 +471,18 @@ class Preview {
 		}
 		$fileId = $fileInfo->getId();
 
-		$cached = $this->isCached($fileId);
+		// caching of aspect preserving preview is not possible at the moment
+		if (!$this->keepAspect) {
+			$cached = $this->isCached($fileId);
 
-		if ($cached) {
-			$stream = $this->userView->fopen($cached, 'r');
-			$image = new \OC_Image();
-			$image->loadFromFileHandle($stream);
-			$this->preview = $image->valid() ? $image : null;
-			$this->resizeAndCrop();
-			fclose($stream);
+			if ($cached) {
+				$stream = $this->userView->fopen($cached, 'r');
+				$image = new \OC_Image();
+				$image->loadFromFileHandle($stream);
+				$this->preview = $image->valid() ? $image : null;
+				$this->resizeAndCrop();
+				fclose($stream);
+			}
 		}
 
 		if (is_null($this->preview)) {
@@ -491,6 +500,12 @@ class Preview {
 
 				if (!($preview instanceof \OC_Image)) {
 					continue;
+				}
+
+				// compute $maxY using the aspect of the generated preview
+				if ($this->keepAspect && $provider->canPreserveAspect()) {
+					$maxY = $maxX / ($preview->width() / $preview->height());
+					$this->setMaxY($maxY);
 				}
 
 				$this->preview = $preview;

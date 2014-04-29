@@ -24,7 +24,7 @@
 		<?php else: ?>
 			<?php if (substr($_['mimetype'], 0, strpos($_['mimetype'], '/')) == 'image'): ?>
 				<div id="imgframe">
-					<img src="<?php p($_['downloadURL']); ?>" />
+					<img src="<?php p(OCP\Util::linkToRoute( 'core_ajax_public_preview', array('x' => 1000, 'y' => 1000, 'a' => 'true', 'file' => $_['directory_path'], 't' => $_['dirToken']))); ?>" class="publicpreview"/>
 				</div>
 			<?php elseif (substr($_['mimetype'], 0, strpos($_['mimetype'], '/')) == 'video'): ?>
 				<div id="imgframe">

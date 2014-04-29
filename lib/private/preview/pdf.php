@@ -40,6 +40,10 @@ if (extension_loaded('imagick')) {
 				//check if image object is valid
 				return $image->valid() ? $image : false;
 			}
+
+			public function canPreserveAspect() {
+				return true;
+			}
 		}
 
 		\OC\Preview::registerProvider('OC\Preview\PDF');
